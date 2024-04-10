@@ -1,0 +1,9 @@
+{
+  "appId": "app.dan.zar.mobile",
+  "appName": "quasarAPPdanzar",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "url": "http://192.168.119.223:9500"
+  }
+}
