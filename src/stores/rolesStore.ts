@@ -23,10 +23,10 @@ export const useRolesStore = defineStore('roles', {
   state: () => <StoreI>({
     roles: ['admin', 'teacher', 'adult', 'junior'],
     info: {
-      admin: 'Administrador/a',
-      teacher: 'Maestro/a',
+      admin: 'Admin',
+      teacher: 'Maestra/o',
       adult: 'Representante',
-      junior: 'Alumno'
+      junior: 'Alumna/o'
     },
     role: 'admin',
     isActiveRegister: {

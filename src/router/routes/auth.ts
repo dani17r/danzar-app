@@ -19,29 +19,16 @@ export default [
   {
     path: '/registro',
     component: () => import('layouts/AuthLayout.vue'),
+    beforeEnter: [isLogin],
     meta: {
       auth: false,
     },
     children: [
       {
         path: '',
-        redirect: { name: 'junior' }
+        name: 'register',
+        component: () => import('src/pages/registers/RegisterPage.vue'),
       },
-      {
-        path: 'representantes',
-        name: 'adult',
-        component: () => import('src/pages/registers/AdultRegisterPage.vue'),
-      },
-      {
-        path: 'alumnos',
-        name: 'junior',
-        component: () => import('src/pages/registers/JuniorRegisterPage.vue')
-      },
-      {
-        path: 'maestros',
-        name: 'teacher',
-        component: () => import('src/pages/registers/TeacherRegisterPage.vue')
-      }
     ],
   },
 ]

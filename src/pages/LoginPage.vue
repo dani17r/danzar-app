@@ -4,18 +4,21 @@ import { useAuthStore } from '../stores/authStore';
 import { ref } from 'vue';
 
 const authStore = useAuthStore();
-const route = useRouter();
+const router = useRouter();
 
 const email = ref('');
 const password = ref('');
 
-const register = async () => {
-  await authStore.signInWithPass({
-    email: email.value,
-    password: password.value
-  }).then(({ error }) => {
-    if (!error) route.push({ name: 'home' });
-  });
+const login = async () => {
+  authStore.signInWithPass(
+    {
+      email: email.value,
+      password: password.value
+    },
+    () => {
+      router.push({ name: 'home' });
+    }
+  )
 }
 </script>
 
@@ -32,12 +35,13 @@ const register = async () => {
       </q-card-section>
       <q-card-section>
         <q-btn style="border-radius: 8px;" color="dark" rounded size="md" label="Sign in" no-caps class="full-width"
-          @click="register()"></q-btn>
+          @click="login()"></q-btn>
       </q-card-section>
       <q-card-section class="text-center q-pt-none">
         <div class="text-grey-8">Crea una cuenta nueva
-          <a href="#" class="text-dark text-weight-bold" style="text-decoration: none">Registrate
-            aqui.</a>
+          <router-Link tag="a" :to="{ name: 'register' }" class="text-dark text-weight-bold"
+            style="text-decoration: none">Registrate
+            aqui.</router-link>
         </div>
       </q-card-section>
     </q-card>

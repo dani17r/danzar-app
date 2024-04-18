@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
-      <buttonDark class="fixed-top-right" style="z-index: 100;" />
+      <buttonDark class="t-fixed t-top-1 t-right-1 t-z-[100]" />
       <router-view />
     </q-page-container>
   </q-layout>

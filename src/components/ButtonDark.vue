@@ -1,11 +1,10 @@
 <script setup>
-import { useDarkModeStore } from '../stores/darkModeStore';
-const darkModeStore = useDarkModeStore();
+import darkModeComp from 'src/composables/darkMode';
+const darkMode = darkModeComp();
 
-darkModeStore.init();
+darkMode.init();
 </script>
 
 <template>
-  <q-btn flat round color="primary" :icon="darkModeStore.isDark ? 'wb_sunny' : 'dark_mode'"
-    @click="darkModeStore.toggle()" />
+  <q-btn flat round color="primary" :icon="darkMode.isDark ? 'wb_sunny' : 'dark_mode'" @click="darkMode.toggle()" />
 </template>

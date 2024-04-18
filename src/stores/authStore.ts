@@ -39,49 +39,98 @@ interface UserI {
   is_anonymous?: boolean;
 }
 
+interface StateI {
+  lifecycles: {
+    onMounted: boolean;
+  };
+  current: UserI | null;
+  data: UserI[] | null;
+}
+
+interface InputsI {
+  RegisterI: { email: string, password: string, role: string };
+  LoginI: { email: string, password: string };
+}
+
+type ActionT = (data: UserI | null) => void;
+
 export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    counter: 0,
+  state: () => <StateI>({
+    lifecycles: {
+      onMounted: false,
+    },
+    current: null,
+    data: null
   }),
   actions: {
 
-    async signUp() {
-      const { data, error } = await supabase.auth.signUp({
-        email: 'someone@email.com',
-        password: 'xlnnJTcWWeaseTwoNsfC'
-      })
-      return { data, error }
+    signUp(user: InputsI['RegisterI'], action?: ActionT) {
+      supabase.auth.signUp(user)
+        .then(({ data, error }) => {
+          if (error) throw error;
+          action && action(data.user as unknown as UserI)
+        })
     },
 
-    async signInWithPass(user: { email: string, password: string }) {
-      const { data, error } = await supabase.auth.signInWithPassword(user)
-      return { data, error }
+    signInWithPass(user: InputsI['LoginI'], action?: ActionT) {
+      supabase.auth.signInWithPassword(user)
+        .then(({ data, error }) => {
+          if (error) throw error;
+          action && action(data.user as unknown as UserI)
+        })
     },
 
-    async signOut() {
-      const { error } = await supabase.auth.signOut()
-      return error
+    signOut(action?: ActionT) {
+      supabase.auth.signOut()
+        .then(({ error }) => {
+          if (error) throw error;
+          action && action(null)
+        })
     },
 
-    async getUser() {
-      const { data: { user } } = await supabase.auth.getUser()
-      return { data: user };
+    getUser(action?: ActionT, isMounted = false) {
+      if (!this.lifecycles.onMounted || isMounted) {
+        this.lifecycles.onMounted = true;
+        supabase.auth.getUser()
+          .then(({ data, error }) => {
+            if (error) {
+              action && action(null)
+              throw 'Usuario no Autenticado';
+            }
+            action && action(data.user as unknown as UserI)
+            this.current = data.user as unknown as UserI;
+          })
+      }
     },
 
-    async resetPasswordForEmail(email: string) {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email)
-      return { data, error }
+    resetPasswordForEmail(email: string, action?: ActionT) {
+      supabase.auth.resetPasswordForEmail(email)
+        .then(({ data, error }) => {
+          if (error) throw error;
+          action && action(data as unknown as UserI);
+        })
     },
 
-    async updateUser(user: UserI) {
-      const { data, error } = await supabase.auth.updateUser(user);
-
-      return { data, error }
+    updateUser(user: UserI, action?: ActionT) {
+      supabase.auth.updateUser(user)
+        .then(({ data, error }) => {
+          if (error) throw error;
+          action && action(data as unknown as UserI)
+        })
     },
 
-    async inviteUserByEmail(email: string) {
-      const { data, error } = await supabase.auth.admin.inviteUserByEmail(email)
-      return { data, error }
+    inviteUserByEmail(email: string, action?: ActionT) {
+      supabase.auth.admin.inviteUserByEmail(email)
+        .then(({ data, error }) => {
+          if (error) throw error;
+          action && action(data as unknown as UserI)
+        })
+    },
+
+    reset() {
+      this.lifecycles.onMounted = false;
+      this.current = null;
+      this.data = null;
     },
   },
 });

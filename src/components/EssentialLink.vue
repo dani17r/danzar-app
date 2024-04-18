@@ -1,11 +1,11 @@
 <template>
-  <q-item clickable tag="a" target="_blank" @click="$router.push(link)">
-    <q-item-section v-if="icon" avatar>
-      <q-icon :name="icon" />
+  <q-item clickable v-ripple @click="$router.push(link)">
+    <q-item-section avatar>
+      <q-icon :name="icon" class="text-primary" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label class="text-primary">{{ title }}</q-item-label>
       <q-item-label caption>{{ caption }}</q-item-label>
     </q-item-section>
   </q-item>
