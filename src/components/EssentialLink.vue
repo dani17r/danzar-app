@@ -1,5 +1,5 @@
 <template>
-  <q-item clickable v-ripple @click="$router.push(link)">
+  <q-item clickable v-ripple>
     <q-item-section avatar>
       <q-icon :name="icon" class="text-primary" />
     </q-item-section>
@@ -15,7 +15,7 @@
 import { EssentialLinkProps } from 'src/interfaces/global';
 
 defineOptions({
-  name: 'EssentialLink'
+  name: 'EssentialLink',
 });
 
 withDefaults(defineProps<EssentialLinkProps>(), {

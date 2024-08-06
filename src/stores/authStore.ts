@@ -48,83 +48,97 @@ interface StateI {
 }
 
 interface InputsI {
-  RegisterI: { email: string, password: string, role: string };
-  LoginI: { email: string, password: string };
+  RegisterI: { email: string; password: string; role: string };
+  LoginI: { email: string; password: string };
+  ResetPasswordI: { password: string };
+  VerifyCodeResetPasswordI: { email: string; token: string };
 }
 
 type ActionT = (data: UserI | null) => void;
 
 export const useAuthStore = defineStore('auth', {
-  state: () => <StateI>({
-    lifecycles: {
-      onMounted: false,
+  state: () =>
+    <StateI>{
+      lifecycles: {
+        onMounted: false,
+      },
+      current: null,
+      data: null,
     },
-    current: null,
-    data: null
-  }),
   actions: {
-
     signUp(user: InputsI['RegisterI'], action?: ActionT) {
-      supabase.auth.signUp(user)
-        .then(({ data, error }) => {
-          if (error) throw error;
-          action && action(data.user as unknown as UserI)
-        })
+      supabase.auth.signUp(user).then(({ data, error }) => {
+        if (error) throw error;
+        action && action(data.user as unknown as UserI);
+      });
     },
 
     signInWithPass(user: InputsI['LoginI'], action?: ActionT) {
-      supabase.auth.signInWithPassword(user)
-        .then(({ data, error }) => {
-          if (error) throw error;
-          action && action(data.user as unknown as UserI)
-        })
+      return supabase.auth.signInWithPassword(user).then(({ data, error }) => {
+        if (error) throw error;
+        action && action(data.user as unknown as UserI);
+      });
     },
 
     signOut(action?: ActionT) {
-      supabase.auth.signOut()
-        .then(({ error }) => {
-          if (error) throw error;
-          action && action(null)
-        })
+      supabase.auth.signOut().then(({ error }) => {
+        if (error) throw error;
+        action && action(null);
+      });
     },
 
     getUser(action?: ActionT, isMounted = false) {
       if (!this.lifecycles.onMounted || isMounted) {
         this.lifecycles.onMounted = true;
-        supabase.auth.getUser()
-          .then(({ data, error }) => {
-            if (error) {
-              action && action(null)
-              throw 'Usuario no Autenticado';
-            }
-            action && action(data.user as unknown as UserI)
-            this.current = data.user as unknown as UserI;
-          })
+        supabase.auth.getUser().then(({ data, error }) => {
+          if (error) {
+            action && action(null);
+            throw 'Usuario no Autenticado';
+          }
+          action && action(data.user as unknown as UserI);
+          this.current = data.user as unknown as UserI;
+        });
       }
     },
 
+    resetPassword(payload: InputsI['ResetPasswordI'], action?: ActionT) {
+      supabase.auth.updateUser(payload).then(({ data, error }) => {
+        if (error) throw error;
+        action && action(data as unknown as UserI);
+      });
+    },
+
     resetPasswordForEmail(email: string, action?: ActionT) {
-      supabase.auth.resetPasswordForEmail(email)
+      supabase.auth.resetPasswordForEmail(email).then(({ data, error }) => {
+        if (error) throw error;
+        action && action(data as unknown as UserI);
+      });
+    },
+
+    VerifyCodeResetPassword(
+      payload: InputsI['VerifyCodeResetPasswordI'],
+      action?: ActionT
+    ) {
+      supabase.auth
+        .verifyOtp({ ...payload, type: 'recovery' } as never)
         .then(({ data, error }) => {
           if (error) throw error;
           action && action(data as unknown as UserI);
-        })
+        });
     },
 
     updateUser(user: UserI, action?: ActionT) {
-      supabase.auth.updateUser(user)
-        .then(({ data, error }) => {
-          if (error) throw error;
-          action && action(data as unknown as UserI)
-        })
+      supabase.auth.updateUser(user).then(({ data, error }) => {
+        if (error) throw error;
+        action && action(data as unknown as UserI);
+      });
     },
 
     inviteUserByEmail(email: string, action?: ActionT) {
-      supabase.auth.admin.inviteUserByEmail(email)
-        .then(({ data, error }) => {
-          if (error) throw error;
-          action && action(data as unknown as UserI)
-        })
+      supabase.auth.admin.inviteUserByEmail(email).then(({ data, error }) => {
+        if (error) throw error;
+        action && action(data as unknown as UserI);
+      });
     },
 
     reset() {

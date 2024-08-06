@@ -2,33 +2,35 @@ import { isLogin } from '../middlewares/authMiddleware';
 
 export default [
   {
-    path: '/inicio-de-sesion',
+    path: '/',
     component: () => import('layouts/AuthLayout.vue'),
     beforeEnter: [isLogin],
-    meta: {
-      auth: false,
-    },
+
     children: [
       {
-        path: '',
+        path: 'inicio-de-sesion',
         name: 'login',
+        meta: {
+          auth: false,
+        },
         component: () => import('src/pages/LoginPage.vue'),
       },
-    ]
-  },
-  {
-    path: '/registro',
-    component: () => import('layouts/AuthLayout.vue'),
-    beforeEnter: [isLogin],
-    meta: {
-      auth: false,
-    },
-    children: [
       {
-        path: '',
+        path: 'registro',
         name: 'register',
-        component: () => import('src/pages/registers/RegisterPage.vue'),
+        meta: {
+          auth: false,
+        },
+        component: () => import('src/pages/RegisterPage.vue'),
+      },
+      {
+        path: 'restablecer-cuenta',
+        name: 'reset-password',
+        meta: {
+          auth: false,
+        },
+        component: () => import('src/pages/ResetPassword.vue'),
       },
     ],
   },
-]
+];

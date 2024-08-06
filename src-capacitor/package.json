@@ -1,7 +1,7 @@
 {
-  "name": "danzarapp",
-  "version": "0.0.1",
-  "description": "academia de danza, app",
+  "name": "Danzar",
+  "version": "1.01",
+  "description": "Academia de danza Daniel Salazar - Danzar",
   "author": "dani17r <dannymetal17@gmail.com>",
   "private": true,
   "dependencies": {

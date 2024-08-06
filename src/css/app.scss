@@ -1,12 +1,22 @@
 // app global css in SCSS form
 .body--light {
   .t-text-white {
-    color: black;
+    color: #2d2d2d;
   }
 }
 
 .body--dark {
-   .t-text-black {
-    color: white
+  .t-text-black {
+    color: rgb(240, 240, 240);
+  }
+  // .t-text-primary {
+  //   color: $primary-dark;
+  // }
+  // .txt-primary {
+  //   color: $primary-dark;
+  // }
+
+  .q-card .q-card--dark {
+    background-color: $dark;
   }
 }

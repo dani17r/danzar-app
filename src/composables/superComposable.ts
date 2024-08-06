@@ -9,9 +9,9 @@ const acounts = useAcountsStore();
 const options = useOptionsStore();
 const roles = useRolesStore();
 const auth = useAuthStore();
-const $q = useQuasar()
 
 export default () => {
+  const $q = useQuasar()
   const router = useRouter();
   const route = useRoute();
 
