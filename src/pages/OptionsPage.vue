@@ -30,11 +30,11 @@ onMounted(() => {
         >
           <q-card>
             <q-card-section class="text-center flex">
-              <WrapperOfLoading :condition="!store.options.loadings.init">
+              <WrapperOfLoading :status="store.options.loadings.init">
                 <q-toggle
                   v-if="store.options.data"
                   color="blue"
-                  v-model="store.options.data.junior"
+                  v-model="store.options.data['registers']!.json.junior.status"
                   label="Activar registro para junior"
                   @update:model-value="store.options.updateOptions('registers')"
                 />

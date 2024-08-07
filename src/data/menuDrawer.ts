@@ -5,7 +5,7 @@ export const linksList: EssentialLinkProps[] = [
     title: 'Opciones',
     caption: 'Acciones sobre el sistema',
     icon: 'tune',
-    link: { 'name': 'options' }
+    link: { name: 'options' }
   },
   {
     title: 'Alumnos',

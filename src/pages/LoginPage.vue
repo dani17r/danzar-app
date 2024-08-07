@@ -1,11 +1,12 @@
 <script setup lang="ts">
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import WrapperOfLoading from 'src/components/WrapperOfLoading.vue';
-import { superForm, formResetDefault } from 'src/utils/actions';
 import superComposable from 'src/composables/superComposable';
+import { formResetDefault } from 'src/utils/actions';
 import { required } from 'src/utils/validations';
+import { superForm } from 'src/utils/super';
 
-const { store, router, $q } = superComposable();
+const { store, router, notify } = superComposable();
 
 const form = superForm({
   email: {
@@ -13,9 +14,9 @@ const form = superForm({
     rules: [required],
   },
   password: {
+    rules: [required],
     value: '123456',
     view: false,
-    rules: [required],
   },
 });
 
@@ -32,10 +33,9 @@ const onSubmit = () => {
     )
     .catch((error) => {
       if (error.message.includes('Invalid login credentials')) {
-        $q.notify({
-          type: 'negative',
-          message: 'Usuario o contraseña incorrecta.',
-        });
+        notify.error('Usuario o contraseña incorrecta.');
+        form.password.error.on();
+        form.email.error.on();
       }
     });
 };
@@ -59,6 +59,7 @@ const onReset = () => {
           </q-card-section>
           <q-card-section>
             <q-input
+              :error="form.email.error.status"
               v-model="form.email.value"
               :rules="form.email.rules"
               label="E-mail"
@@ -68,6 +69,7 @@ const onReset = () => {
             ></q-input>
             <q-input
               :type="!form.password.view ? 'password' : 'text'"
+              :error="form.password.error.status"
               v-model="form.password.value"
               :rules="form.password.rules"
               label="Contraseña"

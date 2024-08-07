@@ -27,15 +27,15 @@ interface StoreI {
     update: boolean;
   };
   data:
-    | null
-    | {
-        [key in string]: {
-          id: string;
-          json: JsonDataI;
-          description: string;
-          name: string;
-        };
-      };
+  | null
+  | {
+    [key in string]: {
+      id: string;
+      json: JsonDataI;
+      description: string;
+      name: string;
+    };
+  };
 }
 
 export const useOptionsStore = defineStore('options', {
@@ -52,7 +52,7 @@ export const useOptionsStore = defineStore('options', {
   getters: {
     isRegisterActive: (state) => {
       if (state.data) {
-        const registersOption = state.data['registers'] as never as JsonDataI;
+        const registersOption = state.data['registers'].json as never as JsonDataI;
         return !Object.values(registersOption).every((val) => !val.status);
       }
       return true;
@@ -66,12 +66,12 @@ export const useOptionsStore = defineStore('options', {
         this.loadings.init = true;
         supabase
           .from('options')
-          .select('json')
+          .select('*')
           .eq('name', name)
           .then(({ data, error }) => {
             if (error) throw error;
             setTimeout(() => (this.loadings.init = false), 400);
-            this.data = { [name]: data[0].json };
+            this.data = { [name]: data[0] };
           });
       }
     },

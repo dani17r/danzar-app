@@ -2,8 +2,9 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import WrapperOfLoading from 'src/components/WrapperOfLoading.vue';
 import { required, requiredSelect } from 'src/utils/validations';
-import { formResetDefault, superForm } from 'src/utils/actions';
 import superComposable from 'src/composables/superComposable';
+import { formResetDefault } from 'src/utils/actions';
+import { superForm } from 'src/utils/super';
 import { onMounted, watchEffect } from 'vue';
 
 const { store, router, $q } = superComposable();
